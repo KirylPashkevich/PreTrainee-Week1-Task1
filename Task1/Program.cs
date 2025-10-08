@@ -2,43 +2,49 @@
 {
     static void Main(string[] args)
     {
-        int program = 0;
-        string inputString = "Enter first string";
-        string secondInputString = "Enter second string";
-        while (program == 0)
+        bool isProgramRun = true;
+
+        while (isProgramRun)
         {
-            double firstValue = GetValidDoubleInput(inputString);
-            Console.Clear();
-            double secondValue = GetValidDoubleInput(secondInputString);
+            double firstValue = GetValidDoubleInput("Enter first string", false);
             Console.Clear();
             char operationType = GetValidOperationInput();
             Console.Clear();
+            double secondValue = GetValidDoubleInput("Enter second string", operationType =='/');
+            Console.Clear();
 
-            switch (operationType)
-            {
-                case '+' :
-                    Console.WriteLine($"{firstValue} {operationType} {secondValue} = {firstValue + secondValue}",firstValue, operationType, secondValue);
-                    break;
-                case '-':
-                    Console.WriteLine($"{firstValue} {operationType} {secondValue} = {firstValue - secondValue}", firstValue, operationType, secondValue);
-                    break;
-                case '*':
-                    Console.WriteLine($"{firstValue} {operationType} {secondValue} = {firstValue * secondValue}", firstValue, operationType, secondValue);
-                    break;
-                case '/':
-                    Console.WriteLine($"{firstValue} {operationType} {secondValue} = {firstValue / secondValue}", firstValue, operationType, secondValue);
-                    break;
-
-            }
+            PrintCalculateResult(firstValue, operationType, secondValue);
+           
             ContinueMessage();
             Console.WriteLine("Do you want to exit?");
             Console.WriteLine("If you want ot exit type \"Exit\"");
-            if (Console.ReadLine() == "Exit")  program = 1;
+            if (Console.ReadLine() == "Exit") isProgramRun = false;
             Console.Clear();
             
 
 
         }          
+    }
+    public static void PrintCalculateResult(double firstValue, char  operationType, double secondValue)
+    {
+        
+        switch (operationType)
+        {
+            case '+':
+                Console.WriteLine($"{firstValue} {operationType} {secondValue} = {firstValue + secondValue}");
+                break;
+            case '-':
+                Console.WriteLine($"{firstValue} {operationType} {secondValue} = {firstValue - secondValue}");
+                break;
+            case '*':
+                Console.WriteLine($"{firstValue} {operationType} {secondValue} = {firstValue * secondValue}");
+                break;
+            case '/':
+                Console.WriteLine($"{firstValue} {operationType} {secondValue} = {firstValue / secondValue}");
+                break;
+
+        }
+    
     }
     public static char GetValidOperationInput()
     {
@@ -52,23 +58,19 @@
             
             if(!validOperations.Contains(operationType)){
                 Console.WriteLine("Error: invalid operation. Please enter one of +, -, *, /.");
-            
                 ContinueMessage();
-                continue;
-             
             }
             else
             {
                 isValid = true;
-               
             }
            
         }
-        while (isValid == false);
+        while (!isValid);
 
         return operationType;
     }
-    public static double GetValidDoubleInput(string input)
+    public static double GetValidDoubleInput(string input, bool check_zero)
     {
         double number;
         bool isValid = false;
@@ -77,14 +79,13 @@
             Console.WriteLine(input);
             if(double.TryParse(Console.ReadLine(),out number))
             {
-                if (input.Contains("second"))
+                if (check_zero == true && number == 0)
                 {
-                    if (number == 0)
-                    {
+                    
                         Console.WriteLine("You trying to divide by zero ");
                         ContinueMessage();
                         continue;
-                    }
+                   
                 }
             }
             else
@@ -95,7 +96,7 @@
             }
             isValid = true;
         }
-        while (isValid == false);
+        while (!isValid);
         return number;
     } 
     
